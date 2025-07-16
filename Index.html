@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Basket - The Art of Freshness</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* ---------------------------------- */
+        /* 0. SETUP & RESET          */
+        /* ---------------------------------- */
+
+        :root {
+            /* Color Palette */
+            --primary-green: #1A4D2E;
+            --background-cream: #FAF3E3;
+            --accent-brown: #AF8F6F;
+            --text-heading: #151515;
+            --text-body: #5a5a5a;
+            --white: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+
+            /* Typography */
+            --font-heading: 'Anton', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            /* Spacing & Effects */
+            --container-width: 1200px;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            --transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--background-cream);
+            color: var(--text-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+        /* ---------------------------------- */
+        /* 1. CUSTOM CURSOR          */
+        /* ---------------------------------- */
+
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-green);
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid hsla(152, 51%, 20%, 0.5);
+            transition: transform 0.2s, width 0.3s, height 0.3s, border-color 0.3s;
+        }
+        
+        /* Cursor Hover States */
+        body.link-hover .cursor-dot {
+            opacity: 0;
+        }
+        body.link-hover .cursor-outline {
+            transform: scale(1.3);
+            width: 60px;
+            height: 60px;
+            border-color: var(--accent-brown);
+        }
+
+        /* ---------------------------------- */
+        /* 2. PRELOADER             */
+        /* ---------------------------------- */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-cream);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .preloader-logo {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* ---------------------------------- */
+        /* 3. LAYOUT & UTILITIES        */
+        /* ---------------------------------- */
+
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+        
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            color: var(--text-heading);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        h1 { font-size: 5rem; line-height: 1.1; }
+        h2 { font-size: 3rem; text-align: center; margin-bottom: 3rem; }
+        h3 { font-size: 1.5rem; }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--primary-green);
+            color: var(--background-cream);
+            text-decoration: none;
+            font-family: var(--font-body);
+            font-weight: 700;
+            border-radius: 50px;
+            transition: var(--transition-fast);
+            border: 2px solid var(--primary-green);
+        }
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(26, 77, 46, 0.3);
+            background-color: #215e3a;
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-green);
+        }
+        .btn-outline:hover {
+            background-color: var(--primary-green);
+            color: var(--background-cream);
+        }
+
+        /* ---------------------------------- */
+        /* 4. HEADER & NAV           */
+        /* ---------------------------------- */
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .header.scrolled {
+            background-color: rgba(250, 243, 227, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo svg {
+            width: 180px;
+            height: auto;
+            transition: transform 0.3s;
+        }
+        .logo:hover svg {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-heading);
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-green);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger-menu {
+            display: none;
+            cursor: pointer;
+            z-index: 1002;
+        }
+        .hamburger-menu .bar {
+            width: 28px;
+            height: 3px;
+            background-color: var(--primary-green);
+            margin: 5px 0;
+            transition: all 0.4s;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-cream);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+        .mobile-nav .nav-menu {
+            flex-direction: column;
+            text-align: center;
+            gap: 2rem;
+        }
+        .mobile-nav .nav-link {
+            font-size: 2rem;
+        }
+        
+        body.mobile-nav-active {
+            overflow: hidden;
+        }
+        body.mobile-nav-active .hamburger-menu .bar:nth-child(1) {
+            transform: rotate(-45deg) translate(-6px, 7px);
+        }
+        body.mobile-nav-active .hamburger-menu .bar:nth-child(2) {
+            opacity: 0;
+        }
+        body.mobile-nav-active .hamburger-menu .bar:nth-child(3) {
+            transform: rotate(45deg) translate(-6px, -7px);
+        }
+        
+        /* ---------------------------------- */
+        /* 5. HERO SECTION          */
+        /* ---------------------------------- */
+        #home {
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+        }
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.pexels.com/photos/1458916/pexels-photo-1458916.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+            filter: brightness(0.8) contrast(1.1);
+            z-index: -1;
+        }
+        .hero-content {
+            color: var(--white);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .hero-content .subtitle {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--background-cream);
+            margin-bottom: 1rem;
+          }
+              /* ---------------------------------- */
+        /* 6. "WHY US" SECTION       */
+        /* ---------------------------------- */
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        .why-us-item {
+            padding: 2rem;
+        }
+        .why-us-item i {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+        }
+        .why-us-item h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-green);
+        }
+        
+        /* ---------------------------------- */
+        /* 7. CATEGORIES & BESTSELLERS     */
+        /* ---------------------------------- */
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+        #shop .grid-layout {
+             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .tilt-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition-fast);
+            transform-style: preserve-3d; /* Required for vanilla-tilt */
+        }
+
+        .category-card {
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .category-card lottie-player {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 1rem;
+        }
+        
+        .product-card .product-image-wrapper {
+            overflow: hidden;
+        }
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+        .product-info {
+            padding: 1.5rem;
+        }
+        .product-info .product-category {
+            font-size: 0.8rem;
+            color: var(--accent-brown);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .product-info h3 {
+            margin: 0.25rem 0 0.5rem;
+        }
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+        /* ---------------------------------- */
+        /* 8. LOGIN SECTION           */
+        /* ---------------------------------- */
+        #login {
+            padding: 0;
+            height: 100vh;
+            min-height: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-green);
+        }
+        .login-container {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .login-bg {
+            background-image: url('https://images.pexels.com/photos/957024/pexels-photo-957024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+        }
+        .login-form-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Glassmorphism Form Box */
+        .form-box {
+            width: 100%;
+            max-width: 450px;
+            padding: 3rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            color: var(--white);
+        }
+        .form-box h2 {
+            text-align: left;
+            margin-bottom: 0.5rem;
+            color: var(--white);
+        }
+        .form-box .form-subtitle {
+            margin-bottom: 2rem;
+            color: var(--background-cream);
+            opacity: 0.8;
+        }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: var(--background-cream);
+            opacity: 0.6;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.3s, color 0.3s;
+            position: relative;
+        }
+        .tab-btn.active {
+            opacity: 1;
+            color: var(--white);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--background-cream);
+        }
+
+        .form-content {
+            display: none;
+        }
+        .form-content.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--background-cream);
+            opacity: 0.8;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--background-cream);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-box .btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--background-cream);
+            color: var(--primary-green);
+        }
+        .form-box .btn:hover {
+            background-color: #e8dfce;
+        }
+        
+        /* ---------------------------------- */
+        /* 9. FOOTER              */
+        /* ---------------------------------- */
+        .footer {
+            background-color: var(--primary-green);
+            color: var(--background-cream);
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .footer .logo svg {
+            width: 200px;
+        }
+        .footer p {
+            max-width: 500px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .social-links a {
+            color: var(--background-cream);
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+        .copyright {
+            margin-top: 2rem;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+
+        /* ---------------------------------- */
+        /* 10. RESPONSIVE DESIGN         */
+        /* ---------------------------------- */
+
+        @media (max-width: 1024px) {
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2.5rem; }
+            
+            /* Responsive Login Page */
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+            .login-bg { display: none; }
+            .login-form-wrapper {
+                background-image: url('https://images.pexels.com/photos/957024/pexels-photo-957024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+                background-size: cover;
+                background-position: center;
+            }
+            .form-box {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; margin-bottom: 2rem; }
+            section { padding: 4rem 0; }
+            .container { padding: 0 1rem; }
+
+            /* Mobile Navigation */
+            .nav-menu { display: none; }
+            .hamburger-menu { display: block; }
+            
+            .hero-content .subtitle { font-size: 1rem; }
+            .why-us-grid { grid-template-columns: 1fr; }
+            .grid-layout { grid-template-columns: 1fr; }
+            #shop .grid-layout { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+            .form-box { padding: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div class="preloader">
+        <div class="preloader-logo">
+            <svg width="220" height="78" viewBox="0 0 220 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text fill="#1A4D2E" xml:space="preserve" style="white-space: pre" font-family="Anton" font-size="36" letter-spacing="0.02em"><tspan x="20" y="62.5">Green Basket</tspan></text>
+            </svg>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="container navbar">
+            <a href="#home" class="logo">
+                <svg width="251" height="97" viewBox="0 0 251 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_1_2)">
+                    <path d="M115.15 16.48C115.15 16.48 107.03 14.53 102.77 19.38C102.77 19.38 98.71 13.96 90.98 16.29C90.98 16.29 89.24 10.68 81.31 12.63C81.31 12.63 79.57 7.02 71.84 9.15C71.84 9.15 70.3 3.35 62.17 5.48C62.17 5.48 59.46 0.25 51.92 2.76C51.92 2.76 50.38 -1.7 42.64 1.21C42.64 1.21 39.16 -1.7 34.13 2.57C34.13 2.57 32.2 -0.92 26.63 2.38C26.63 2.38 25.09 -0.53 20.25 2.57C20.25 2.57 17.16 -0.15 13.06 3.54C13.06 3.54 11.13 0.25 6.47 3.93C6.47 3.93 4.15 1.4 0.62 5.67V31.54H119.89V21.14C119.89 21.14 119.4 18.24 115.15 16.48Z" fill="#76C893"/>
+                    <path d="M129.58 35.61C126.91 35.79 123.67 36.17 121.2 38.01C122.36 33.25 120.37 28.5 117.8 24.31C117.8 24.31 119.24 21.32 122.94 22.48C127.41 23.83 129.58 29.85 129.58 35.61Z" fill="#3E8914"/>
+                    <path d="M6.05 31.54H0.62V5.67C4.15 1.4 6.47 3.93 6.47 3.93C11.13 0.25 13.06 3.54 13.06 3.54C17.16 -0.15 20.25 2.57 20.25 2.57C25.09 -0.53 26.63 2.38 26.63 2.38C32.2 -0.92 34.13 2.57 34.13 2.57C39.16 -1.7 42.64 1.21 42.64 1.21C50.38 -1.7 51.92 2.76 51.92 2.76C59.46 0.25 62.17 5.48 62.17 5.48C70.3 3.35 71.84 9.15 71.84 9.15C79.57 7.02 81.31 12.63 81.31 12.63C89.24 10.68 90.98 16.29 90.98 16.29C98.71 13.96 102.77 19.38 102.77 19.38C107.03 14.53 115.15 16.48 115.15 16.48C119.4 18.24 119.89 21.14 119.89 21.14V31.54H6.05Z" fill="#B5E48C"/>
+                    <path d="M152.12 43.19C152.12 43.19 154.67 36.98 143.91 35.24C143.91 35.24 140.24 28.64 129.58 35.62C129.58 35.62 120.37 28.5 117.8 24.31C117.8 24.31 119.24 21.32 122.94 22.48C127.41 23.83 129.58 29.85 129.58 35.62C126.91 35.8 123.67 36.17 121.2 38.02C121.2 38.02 119.89 31.54 6.05 31.54H119.89V41.08C126.33 46.85 137.86 48.02 143.91 44.54C143.91 44.54 149.29 49.37 152.12 43.19Z" fill="#52B69A"/>
+                    <path d="M149.82 45.47C149.82 45.47 151.79 38.68 143.91 35.24C140.24 28.64 129.58 35.61 129.58 35.61C129.58 35.61 121.2 38.01 121.2 38.01V40.22C121.2 40.22 123.48 40.41 124.93 42.06C124.93 42.06 126.33 46.85 137.86 48.02C137.86 48.02 143.91 44.54 143.91 44.54C143.91 44.54 147.24 49.37 149.82 45.47Z" fill="#34A0A4"/>
+                    <path d="M149.82 45.47C149.82 45.47 151.12 50.81 144.29 52.36C144.29 52.36 137.67 56.12 133.09 48.99C133.09 48.99 126.33 46.85 137.86 48.02C137.86 48.02 143.91 44.54 143.91 44.54C143.91 44.54 147.24 49.37 149.82 45.47Z" fill="#168AAD"/>
+                    <path d="M129.2 56.12C129.2 56.12 137.67 56.12 133.09 48.99C133.09 48.99 126.33 46.85 137.86 48.02C137.86 48.02 124.93 42.06 124.93 42.06C124.93 42.06 121.2 40.22 121.2 40.22C121.2 40.22 119.89 45.56 121.58 52.75C121.58 52.75 125.45 56.12 129.2 56.12Z" fill="#1A759F"/>
+                    <path d="M121.58 52.75C121.58 52.75 119.89 59.88 126.33 60.65C126.33 60.65 132.39 65.6 129.2 56.12C129.2 56.12 125.45 56.12 121.58 52.75Z" fill="#1E6091"/>
+                    <path d="M6.05 31.54V59.1C6.05 69.88 23.33 76.85 41.57 76.85C60.2 76.85 77.29 69.88 77.29 59.1V40.22H6.05V31.54Z" fill="#184E77"/>
+                    <path d="M77.29 40.22V59.1C77.29 69.88 94.56 76.85 112.81 76.85C131.43 76.85 148.52 69.88 148.52 59.1V44.54C143.91 44.54 137.86 48.02 137.86 48.02C126.33 46.85 133.09 48.99 133.09 48.99C137.67 56.12 129.2 56.12 129.2 56.12C132.39 65.6 126.33 60.65 126.33 60.65C119.89 59.88 121.58 52.75 121.58 52.75C125.45 56.12 129.2 56.12 129.2 56.12C119.89 45.56 121.2 40.22 121.2 40.22H77.29Z" fill="#1A4D2E"/>
+                    <path d="M136.03 20.35C136.03 20.35 138.2 13.96 130.66 12.04C130.66 12.04 131.62 6.61 124.68 6.22C124.68 6.22 122.94 1.77 116.39 3.15C116.39 3.15 113.88 -1.7 107.03 1.21C107.03 1.21 103.55 -1.13 99.41 2.38C99.41 2.38 96.12 0.44 91.95 4.31C91.95 4.31 88.08 2.19 84.71 6.22C84.71 6.22 81.31 4.5 77.86 8.58C77.86 8.58 75.29 6.81 71.84 9.15C71.84 9.15 69.32 7.02 65.15 9.72C65.15 9.72 61.98 7.59 58.23 10.68C58.23 10.68 54.48 8.74 51.11 12.63C51.11 12.63 47.94 10.68 44.38 13.96C44.38 13.96 41.57 12.24 38.01 15.13C38.01 15.13 36.26 13.01 32.17 15.51C32.17 15.51 30.62 13.58 27 16.29C27 16.29 25.06 14.53 21.02 17.06C21.02 17.06 18.88 15.51 15.51 18.02C15.51 18.02 13.25 16.48 9.22 19.38C9.22 19.38 5.66 17.83 3.14 21.71L12.1 29.85H138.2L147.16 21.71C144.25 17.26 140.24 19.57 140.24 19.57C140.24 19.57 137.83 17.83 136.03 20.35Z" fill="#F7B801"/>
+                    <path d="M129.2 1.59C129.58 1.59 130.3 1.77 130.66 1.96C131.43 2.54 131.62 3.54 131.05 4.31C130.48 5.09 129.49 5.27 128.81 4.7C128.24 4.12 128.05 3.12 128.62 2.35C128.81 2.06 129.2 1.59 129.2 1.59Z" fill="#DC2F02"/>
+                    <path d="M124.68 2.17C125.06 2.17 125.64 2.35 126.01 2.54C126.75 3.12 126.94 4.12 126.37 4.88C125.8 5.66 124.81 5.84 124.11 5.27C123.41 4.7 123.22 3.7 123.79 2.93C123.98 2.64 124.5 2.17 124.68 2.17Z" fill="#E85D04"/>
+                    <path d="M119.52 3.15C119.89 3.15 120.47 3.34 120.84 3.54C121.58 4.12 121.77 5.11 121.2 5.89C120.63 6.66 119.64 6.84 118.94 6.27C118.24 5.7 118.05 4.7 118.62 3.93C118.81 3.64 119.33 3.15 119.52 3.15Z" fill="#F48C06"/>
+                    <path d="M114.38 3.93C114.76 3.93 115.34 4.12 115.71 4.31C116.45 4.88 116.64 5.87 116.07 6.65C115.5 7.42 114.51 7.6 113.81 7.03C113.11 6.46 112.92 5.46 113.49 4.69C113.68 4.4 114.2 3.93 114.38 3.93Z" fill="#FAA307"/>
+                    <path d="M109.43 4.5C109.81 4.5 110.39 4.69 110.76 4.88C111.5 5.46 111.69 6.45 111.12 7.23C110.55 8 109.56 8.18 108.86 7.61C108.16 7.04 107.97 6.04 108.54 5.27C108.73 4.98 109.25 4.5 109.43 4.5Z" fill="#FFBA08"/>
+                    <path d="M129.2 1.59L128.62 2.35C128.05 3.12 128.24 4.12 128.81 4.7C129.49 5.27 130.48 5.09 131.05 4.31C131.62 3.54 131.43 2.54 130.66 1.96C130.3 1.77 129.58 1.59 129.2 1.59C129.2 1.59 128.81 1.86 128.62 2.35M124.68 2.17L123.79 2.93C123.22 3.7 123.41 4.7 124.11 5.27C124.81 5.84 125.8 5.66 126.37 4.88C126.94 4.12 126.75 3.12 126.01 2.54C125.64 2.35 125.06 2.17 124.68 2.17C124.68 2.17 124.31 2.44 123.79 2.93M119.52 3.15L118.62 3.93C118.05 4.7 118.24 5.7 118.94 6.27C119.64 6.84 120.63 6.66 121.2 5.89C121.77 5.11 121.58 4.12 120.84 3.54C120.47 3.34 119.89 3.15 119.52 3.15C119.52 3.15 119.14 3.42 118.62 3.93M114.38 3.93L113.49 4.69C112.92 5.46 113.11 6.46 113.81 7.03C114.51 7.6 115.5 7.42 116.07 6.65C116.64 5.87 116.45 4.88 115.71 4.31C115.34 4.12 114.76 3.93 114.38 3.93C114.38 3.93 114.01 4.2 113.49 4.69M109.43 4.5L108.54 5.27C107.97 6.04 108.16 7.04 108.86 7.61C109.56 8.18 110.55 8 111.12 7.23C111.69 6.45 111.5 5.46 110.76 4.88C110.39 4.69 109.81 4.5 109.43 4.5C109.43 4.5 109.06 4.77 108.54 5.27M138.2 29.85L130.66 12.04C131.62 6.61 124.68 6.22 124.68 6.22L124.68 5.84C124.68 5.84 122.94 1.77 116.39 3.15C113.88 -1.7 107.03 1.21 107.03 1.21C103.55 -1.13 99.41 2.38 99.41 2.38C96.12 0.44 91.95 4.31 91.95 4.31C88.08 2.19 84.71 6.22 84.71 6.22C81.31 4.5 77.86 8.58 77.86 8.58C75.29 6.81 71.84 9.15 71.84 9.15C69.32 7.02 65.15 9.72 65.15 9.72C61.98 7.59 58.23 10.68 58.23 10.68C54.48 8.74 51.11 12.63 51.11 12.63C47.94 10.68 44.38 13.96 44.38 13.96C41.57 12.24 38.01 15.13 38.01 15.13C36.26 13.01 32.17 15.51 32.17 15.51C30.62 13.58 27 16.29 27 16.29C25.06 14.53 21.02 17.06 21.02 17.06C18.88 15.51 15.51 18.02 15.51 18.02C13.25 16.48 9.22 19.38 9.22 19.38C5.66 17.83 3.14 21.71 3.14 21.71L12.1 29.85L138.2 29.85Z" fill="#D68C45"/>
+                    <path d="M141.4 12.24C140.83 13.01 140.64 14.01 141.21 14.78C141.78 15.55 142.77 15.74 143.47 15.16C144.17 14.59 144.36 13.59 143.79 12.82C143.41 12.24 142.33 11.86 141.4 12.24Z" fill="#DC2F02"/>
+                    <path d="M145.42 14.53C144.85 15.3 144.66 16.3 145.23 17.06C145.8 17.83 146.79 18.02 147.49 17.45C148.19 16.88 148.38 15.88 147.81 15.11C147.43 14.53 146.35 14.15 145.42 14.53Z" fill="#E85D04"/>
+                    <path d="M149.03 16.88C148.46 17.65 148.27 18.64 148.84 19.41C149.41 20.18 150.4 20.37 151.1 19.8C151.8 19.23 151.99 18.23 151.42 17.46C151.04 16.88 149.96 16.5 149.03 16.88Z" fill="#F48C06"/>
+                    <path d="M149.22 23.41C148.65 24.18 148.46 25.17 149.03 25.94C149.6 26.71 150.59 26.9 151.29 26.33C151.99 25.76 152.18 24.76 151.61 23.99C151.23 23.41 150.15 23.03 149.22 23.41Z" fill="#FAA307"/>
+                    <path d="M148.05 28.5C147.48 29.27 147.29 30.26 147.86 31.03C148.43 31.8 149.42 31.99 150.12 31.42C150.82 30.85 151.01 29.85 150.44 29.08C150.06 28.5 148.98 28.12 148.05 28.5Z" fill="#FFBA08"/>
+                    <text fill="#1A4D2E" xml:space="preserve" style="white-space: pre" font-family="Anton" font-size="36" letter-spacing="0.02em"><tspan x="20.08" y="93.84">Green Basket</tspan></text>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_1_2">
+                    <rect width="251" height="97" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+            </a>
+            <div class="hamburger-menu">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav class="mobile-nav">
+                 <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#categories" class="nav-link">Categories</a></li>
+                    <li><a href="#shop" class="nav-link">Shop</a></li>
+                    <li><a href="#login" class="nav-link">Login</a></li>
+                </ul>
+            </nav>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#categories" class="nav-link">Categories</a></li>
+                <li><a href="#shop" class="nav-link">Shop</a></li>
+                <li><a href="#login" class="nav-link btn">Sign Up</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="hero-background" style="background-image: url('https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+            <div class="container hero-content" data-aos="fade-up">
+                <p class="subtitle">Welcome to Green Basket</p>
+                <h1>The Art of<br>Freshness</h1>
+            </div>
+        </section>
+
+        <section id="why-us">
+            <div class="container">
+                <h2 data-aos="fade-up">Purity in Every Product</h2>
+                <div class="why-us-grid">
+                    <div class="why-us-item" data-aos="fade-up" data-aos-delay="100">
+                        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1" style="width: 80px; height: 80px; margin: 0 auto 1rem;" loop autoplay></lottie-player>
+                        <h3>100% Organic</h3>
+                        <p>Every ingredient is sourced ethically and grown without compromise.</p>
+                    </div>
+                    <div class="why-us-item" data-aos="fade-up" data-aos-delay="200">
+                        <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_cgyop9oc.json" background="transparent" speed="1" style="width: 80px; height: 80px; margin: 0 auto 1rem;" loop autoplay></lottie-player>
+                        <h3>Sustainably Made</h3>
+                        <p>We believe in products that are kind to you and kind to the planet.</p>
+                    </div>
+                    <div class="why-us-item" data-aos="fade-up" data-aos-delay="300">
+                         <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_poqmycwy.json" background="transparent" speed="1" style="width: 80px; height: 80px; margin: 0 auto 1rem;" loop autoplay></lottie-player>
+                        <h3>Quality Assured</h3>
+                        <p>Handcrafted and tested to ensure the highest standard of quality and care.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categories" style="background-color: var(--white);">
+            <div class="container">
+                <h2 data-aos="fade-up">Explore Our Collections</h2>
+                <div class="grid-layout">
+                    <div class="tilt-card category-card" data-aos="fade-up" data-aos-delay="100">
+                        <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_q4h7T0.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                        <h3>Natural Skin Care</h3>
+                    </div>
+                     <div class="tilt-card category-card" data-aos="fade-up" data-aos-delay="200">
+                        <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_i3hdm9l6.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                        <h3>Home Essentials</h3>
+                    </div>
+                     <div class="tilt-card category-card" data-aos="fade-up" data-aos-delay="300">
+                        <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_ej8p3lki.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                        <h3>Herbal Products</h3>
+                    </div>
+                     <div class="tilt-card category-card" data-aos="fade-up" data-aos-delay="400">
+                        <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_qkbitfbo.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                        <h3>Kitchen Items</h3>
+                    </div>
+                    <div class="tilt-card category-card" data-aos="fade-up" data-aos-delay="500">
+                        <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_d3vw5gid.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                        <h3>Sustainable Crafts</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="shop">
+            <div class="container">
+                <h2 data-aos="fade-up">Our Bestsellers</h2>
+                <div class="grid-layout">
+                    <div class="tilt-card product-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.pexels.com/photos/7262913/pexels-photo-7262913.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Natural skin care balm">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-category">Skin Care</p>
+                            <h3>Soothing Lavender Balm</h3>
+                            <p class="product-price">$18.50</p>
+                        </div>
+                    </div>
+                    <div class="tilt-card product-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.pexels.com/photos/4210611/pexels-photo-4210611.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Eco friendly home cleaner">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-category">Home Essentials</p>
+                            <h3>Eco-Friendly Surface Spray</h3>
+                            <p class="product-price">$12.00</p>
+                        </div>
+                    </div>
+                    <div class="tilt-card product-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.pexels.com/photos/905485/pexels-photo-905485.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Herbal tea">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-category">Herbal Products</p>
+                            <h3>Calming Chamomile Tea</h3>
+                            <p class="product-price">$9.75</p>
+                        </div>
+                    </div>
+                    <div class="tilt-card product-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.pexels.com/photos/373404/pexels-photo-373404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Handcrafted wooden spatula">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-category">Kitchen Items</p>
+                            <h3>Handcrafted Olivewood Spatula</h3>
+                            <p class="product-price">$22.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="login">
+            <div class="login-container">
+                <div class="login-bg" data-aos="fade-right" data-aos-duration="1500"></div>
+                <div class="login-form-wrapper" data-aos="fade-left" data-aos-duration="1500">
+                    <div class="form-box">
+                        <div class="form-tabs">
+                            <button class="tab-btn active" data-form="login-form">Login</button>
+                            <button class="tab-btn" data-form="register-form">Register</button>
+                        </div>
+                        
+                        <div id="login-form" class="form-content active">
+                             <h2>Welcome Back</h2>
+                             <p class="form-subtitle">Enter your details to sign in.</p>
+                            <form>
+                                <div class="input-group">
+                                    <label for="login-email">Email Address</label>
+                                    <input type="email" id="login-email" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="login-password">Password</label>
+                                    <input type="password" id="login-password" required>
+                                </div>
+                                <button type="submit" class="btn">Login</button>
+                            </form>
+                        </div>
+                        
+                        <div id="register-form" class="form-content">
+                            <h2>Create Account</h2>
+                            <p class="form-subtitle">Join the Green Basket family.</p>
+                            <form>
+                                <div class="input-group">
+                                    <label for="reg-name">Full Name</label>
+                                    <input type="text" id="reg-name" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="reg-email">Email Address</label>
+                                    <input type="email" id="reg-email" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="reg-password">Password</label>
+                                    <input type="password" id="reg-password" required>
+                                </div>
+                                <button type="submit" class="btn">Create Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="container footer-content" data-aos="fade-up">
+            <a href="#home" class="logo">
+                <svg width="251" height="97" viewBox="0 0 251 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_1_2)">
+                    <path d="M115.15 16.48C115.15 16.48 107.03 14.53 102.77 19.38C102.77 19.38 98.71 13.96 90.98 16.29C90.98 16.29 89.24 10.68 81.31 12.63C81.31 12.63 79.57 7.02 71.84 9.15C71.84 9.15 70.3 3.35 62.17 5.48C62.17 5.48 59.46 0.25 51.92 2.76C51.92 2.76 50.38 -1.7 42.64 1.21C42.64 1.21 39.16 -1.7 34.13 2.57C34.13 2.57 32.2 -0.92 26.63 2.38C26.63 2.38 25.09 -0.53 20.25 2.57C20.25 2.57 17.16 -0.15 13.06 3.54C13.06 3.54 11.13 0.25 6.47 3.93C6.47 3.93 4.15 1.4 0.62 5.67V31.54H119.89V21.14C119.89 21.14 119.4 18.24 115.15 16.48Z" fill="#B5E48C"/>
+                    <path d="M129.58 35.61C126.91 35.79 123.67 36.17 121.2 38.01C122.36 33.25 120.37 28.5 117.8 24.31C117.8 24.31 119.24 21.32 122.94 22.48C127.41 23.83 129.58 29.85 129.58 35.61Z" fill="#76C893"/>
+                    <path d="M6.05 31.54H0.62V5.67C4.15 1.4 6.47 3.93 6.47 3.93C11.13 0.25 13.06 3.54 13.06 3.54C17.16 -0.15 20.25 2.57 20.25 2.57C25.09 -0.53 26.63 2.38 26.63 2.38C32.2 -0.92 34.13 2.57 34.13 2.57C39.16 -1.7 42.64 1.21 42.64 1.21C50.38 -1.7 51.92 2.76 51.92 2.76C59.46 0.25 62.17 5.48 62.17 5.48C70.3 3.35 71.84 9.15 71.84 9.15C79.57 7.02 81.31 12.63 81.31 12.63C89.24 10.68 90.98 16.29 90.98 16.29C98.71 13.96 102.77 19.38 102.77 19.38C107.03 14.53 115.15 16.48 115.15 16.48C119.4 18.24 119.89 21.14 119.89 21.14V31.54H6.05Z" fill="#D8F3DC"/>
+                    <path d="M152.12 43.19C152.12 43.19 154.67 36.98 143.91 35.24C143.91 35.24 140.24 28.64 129.58 35.62C129.58 35.62 120.37 28.5 117.8 24.31C117.8 24.31 119.24 21.32 122.94 22.48C127.41 23.83 129.58 29.85 129.58 35.62C126.91 35.8 123.67 36.17 121.2 38.02C121.2 38.02 119.89 31.54 6.05 31.54H119.89V41.08C126.33 46.85 137.86 48.02 143.91 44.54C143.91 44.54 149.29 49.37 152.12 43.19Z" fill="#95D5B2"/>
+                    <path d="M149.82 45.47C149.82 45.47 151.79 38.68 143.91 35.24C140.24 28.64 129.58 35.61 129.58 35.61C129.58 35.61 121.2 38.01 121.2 38.01V40.22C121.2 40.22 123.48 40.41 124.93 42.06C124.93 42.06 126.33 46.85 137.86 48.02C137.86 48.02 143.91 44.54 143.91 44.54C143.91 44.54 147.24 49.37 149.82 45.47Z" fill="#74C69D"/>
+                    <path d="M149.82 45.47C149.82 45.47 151.12 50.81 144.29 52.36C144.29 52.36 137.67 56.12 133.09 48.99C133.09 48.99 126.33 46.85 137.86 48.02C137.86 48.02 143.91 44.54 143.91 44.54C143.91 44.54 147.24 49.37 149.82 45.47Z" fill="#52B69A"/>
+                    <path d="M129.2 56.12C129.2 56.12 137.67 56.12 133.09 48.99C133.09 48.99 126.33 46.85 137.86 48.02C137.86 48.02 124.93 42.06 124.93 42.06C124.93 42.06 121.2 40.22 121.2 40.22C121.2 40.22 119.89 45.56 121.58 52.75C121.58 52.75 125.45 56.12 129.2 56.12Z" fill="#40916C"/>
+                    <path d="M121.58 52.75C121.58 52.75 119.89 59.88 126.33 60.65C126.33 60.65 132.39 65.6 129.2 56.12C129.2 56.12 125.45 56.12 121.58 52.75Z" fill="#2D6A4F"/>
+                    <path d="M6.05 31.54V59.1C6.05 69.88 23.33 76.85 41.57 76.85C60.2 76.85 77.29 69.88 77.29 59.1V40.22H6.05V31.54Z" fill="#1B4332"/>
+                    <path d="M77.29 40.22V59.1C77.29 69.88 94.56 76.85 112.81 76.85C131.43 76.85 148.52 69.88 148.52 59.1V44.54C143.91 44.54 137.86 48.02 137.86 48.02C126.33 46.85 133.09 48.99 133.09 48.99C137.67 56.12 129.2 56.12 129.2 56.12C132.39 65.6 126.33 60.65 126.33 60.65C119.89 59.88 121.58 52.75 121.58 52.75C125.45 56.12 129.2 56.12 129.2 56.12C119.89 45.56 121.2 40.22 121.2 40.22H77.29Z" fill="#081C15"/>
+                    <path d="M136.03 20.35C136.03 20.35 138.2 13.96 130.66 12.04C130.66 12.04 131.62 6.61 124.68 6.22C124.68 6.22 122.94 1.77 116.39 3.15C116.39 3.15 113.88 -1.7 107.03 1.21C107.03 1.21 103.55 -1.13 99.41 2.38C99.41 2.38 96.12 0.44 91.95 4.31C91.95 4.31 88.08 2.19 84.71 6.22C84.71 6.22 81.31 4.5 77.86 8.58C77.86 8.58 75.29 6.81 71.84 9.15C71.84 9.15 69.32 7.02 65.15 9.72C65.15 9.72 61.98 7.59 58.23 10.68C58.23 10.68 54.48 8.74 51.11 12.63C51.11 12.63 47.94 10.68 44.38 13.96C44.38 13.96 41.57 12.24 38.01 15.13C38.01 15.13 36.26 13.01 32.17 15.51C32.17 15.51 30.62 13.58 27 16.29C27 16.29 25.06 14.53 21.02 17.06C21.02 17.06 18.88 15.51 15.51 18.02C15.51 18.02 13.25 16.48 9.22 19.38C9.22 19.38 5.66 17.83 3.14 21.71L12.1 29.85H138.2L147.16 21.71C144.25 17.26 140.24 19.57 140.24 19.57C140.24 19.57 137.83 17.83 136.03 20.35Z" fill="#F7B801"/>
+                    <path d="M129.2 1.59C129.58 1.59 130.3 1.77 130.66 1.96C131.43 2.54 131.62 3.54 131.05 4.31C130.48 5.09 129.49 5.27 128.81 4.7C128.24 4.12 128.05 3.12 128.62 2.35C128.81 2.06 129.2 1.59 129.2 1.59Z" fill="#DC2F02"/>
+                    <path d="M124.68 2.17C125.06 2.17 125.64 2.35 126.01 2.54C126.75 3.12 126.94 4.12 126.37 4.88C125.8 5.66 124.81 5.84 124.11 5.27C123.41 4.7 123.22 3.7 123.79 2.93C123.98 2.64 124.5 2.17 124.68 2.17Z" fill="#E85D04"/>
+                    <path d="M119.52 3.15C119.89 3.15 120.47 3.34 120.84 3.54C121.58 4.12 121.77 5.11 121.2 5.89C120.63 6.66 119.64 6.84 118.94 6.27C118.24 5.7 118.05 4.7 118.62 3.93C118.81 3.64 119.33 3.15 119.52 3.15Z" fill="#F48C06"/>
+                    <path d="M114.38 3.93C114.76 3.93 115.34 4.12 115.71 4.31C116.45 4.88 116.64 5.87 116.07 6.65C115.5 7.42 114.51 7.6 113.81 7.03C113.11 6.46 112.92 5.46 113.49 4.69C113.68 4.4 114.2 3.93 114.38 3.93Z" fill="#FAA307"/>
+                    <path d="M109.43 4.5C109.81 4.5 110.39 4.69 110.76 4.88C111.5 5.46 111.69 6.45 111.12 7.23C110.55 8 109.56 8.18 108.86 7.61C108.16 7.04 107.97 6.04 108.54 5.27C108.73 4.98 109.25 4.5 109.43 4.5Z" fill="#FFBA08"/>
+                    <path d="M129.2 1.59L128.62 2.35C128.05 3.12 128.24 4.12 128.81 4.7C129.49 5.27 130.48 5.09 131.05 4.31C131.62 3.54 131.43 2.54 130.66 1.96C130.3 1.77 129.58 1.59 129.2 1.59C129.2 1.59 128.81 1.86 128.62 2.35M124.68 2.17L123.79 2.93C123.22 3.7 123.41 4.7 124.11 5.27C124.81 5.84 125.8 5.66 126.37 4.88C126.94 4.12 126.75 3.12 126.01 2.54C125.64 2.35 125.06 2.17 124.68 2.17C124.68 2.17 124.31 2.44 123.79 2.93M119.52 3.15L118.62 3.93C118.05 4.7 118.24 5.7 118.94 6.27C119.64 6.84 120.63 6.66 121.2 5.89C121.77 5.11 121.58 4.12 120.84 3.54C120.47 3.34 119.89 3.15 119.52 3.15C119.52 3.15 119.14 3.42 118.62 3.93M114.38 3.93L113.49 4.69C112.92 5.46 113.11 6.46 113.81 7.03C114.51 7.6 115.5 7.42 116.07 6.65C116.64 5.87 116.45 4.88 115.71 4.31C115.34 4.12 114.76 3.93 114.38 3.93C114.38 3.93 114.01 4.2 113.49 4.69M109.43 4.5L108.54 5.27C107.97 6.04 108.16 7.04 108.86 7.61C109.56 8.18 110.55 8 111.12 7.23C111.69 6.45 111.5 5.46 110.76 4.88C110.39 4.69 109.81 4.5 109.43 4.5C109.43 4.5 109.06 4.77 108.54 5.27M138.2 29.85L130.66 12.04C131.62 6.61 124.68 6.22 124.68 6.22L124.68 5.84C124.68 5.84 122.94 1.77 116.39 3.15C113.88 -1.7 107.03 1.21 107.03 1.21C103.55 -1.13 99.41 2.38 99.41 2.38C96.12 0.44 91.95 4.31 91.95 4.31C88.08 2.19 84.71 6.22 84.71 6.22C81.31 4.5 77.86 8.58 77.86 8.58C75.29 6.81 71.84 9.15 71.84 9.15C69.32 7.02 65.15 9.72 65.15 9.72C61.98 7.59 58.23 10.68 58.23 10.68C54.48 8.74 51.11 12.63 51.11 12.63C47.94 10.68 44.38 13.96 44.38 13.96C41.57 12.24 38.01 15.13 38.01 15.13C36.26 13.01 32.17 15.51 32.17 15.51C30.62 13.58 27 16.29 27 16.29C25.06 14.53 21.02 17.06 21.02 17.06C18.88 15.51 15.51 18.02 15.51 18.02C13.25 16.48 9.22 19.38 9.22 19.38C5.66 17.83 3.14 21.71 3.14 21.71L12.1 29.85L138.2 29.85Z" fill="#D68C45"/>
+                    <path d="M141.4 12.24C140.83 13.01 140.64 14.01 141.21 14.78C141.78 15.55 142.77 15.74 143.47 15.16C144.17 14.59 144.36 13.59 143.79 12.82C143.41 12.24 142.33 11.86 141.4 12.24Z" fill="#DC2F02"/>
+                    <path d="M145.42 14.53C144.85 15.3 144.66 16.3 145.23 17.06C145.8 17.83 146.79 18.02 147.49 17.45C148.19 16.88 148.38 15.88 147.81 15.11C147.43 14.53 146.35 14.15 145.42 14.53Z" fill="#E85D04"/>
+                    <path d="M149.03 16.88C148.46 17.65 148.27 18.64 148.84 19.41C149.41 20.18 150.4 20.37 151.1 19.8C151.8 19.23 151.99 18.23 151.42 17.46C151.04 16.88 149.96 16.5 149.03 16.88Z" fill="#F48C06"/>
+                    <path d="M149.22 23.41C148.65 24.18 148.46 25.17 149.03 25.94C149.6 26.71 150.59 26.9 151.29 26.33C151.99 25.76 152.18 24.76 151.61 23.99C151.23 23.41 150.15 23.03 149.22 23.41Z" fill="#FAA307"/>
+                    <path d="M148.05 28.5C147.48 29.27 147.29 30.26 147.86 31.03C148.43 31.8 149.42 31.99 150.12 31.42C150.82 30.85 151.01 29.85 150.44 29.08C150.06 28.5 148.98 28.12 148.05 28.5Z" fill="#FFBA08"/>
+                    <text fill="#FAF3E3" xml:space="preserve" style="white-space: pre" font-family="Anton" font-size="36" letter-spacing="0.02em"><tspan x="20.08" y="93.84">Green Basket</tspan></text>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_1_2">
+                    <rect width="251" height="97" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+            </a>
+            <p>"The Art of Freshness." Pure, organic, and delivered with care.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; <span id="year"></span> Green Basket. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- 0. PRELOADER LOGIC ---
+        const preloader = document.querySelector('.preloader');
+        window.addEventListener('load', () => {
+            preloader.classList.add('hidden');
+        });
+
+        // --- 1. AOS INITIALIZATION ---
+        // Staggered animations for grids and smooth fade-ups for everything else.
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 50,
+        });
+
+        // --- 2. VANILLA-TILT.JS INITIALIZATION ---
+        // Applying the subtle, realistic 3D tilt effect to all specified cards.
+        VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+            max: 8, // Max tilt rotation (degrees)
+            speed: 400, // Speed of the enter/exit transition
+            glare: true, // If it should have a "glare" effect
+            "max-glare": 0.15, // The glare opacity
+            scale: 1.03 // Slightly scale up on hover
+        });
+
+        // --- 3. CUSTOM CURSOR LOGIC ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+        
+        const interactiveElements = document.querySelectorAll('a, button, .tilt-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('link-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('link-hover');
+            });
+        });
+
+        // --- 4. HEADER SCROLL EFFECT ---
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // --- 5. MOBILE NAVIGATION TOGGLE ---
+        const hamburger = document.querySelector('.hamburger-menu');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const navLinks = document.querySelectorAll('.mobile-nav .nav-link');
+        
+        hamburger.addEventListener('click', () => {
+            document.body.classList.toggle('mobile-nav-active');
+            mobileNav.classList.toggle('active');
+        });
+        
+        // Close nav when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                 document.body.classList.remove('mobile-nav-active');
+                 mobileNav.classList.remove('active');
+            });
+        });
+
+        // --- 6. LOGIN PAGE TABS ---
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const formContents = document.querySelectorAll('.form-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deactivate all
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                formContents.forEach(content => content.classList.remove('active'));
+
+                // Activate clicked
+                button.classList.add('active');
+                const formId = button.getAttribute('data-form');
+                document.getElementById(formId).classList.add('active');
+            });
+        });
+        
+        // --- 7. FOOTER YEAR ---
+        document.getElementById('year').textContent = new Date().getFullYear();
+    });
+    </script>
+</body>
+</html>
+
+      
